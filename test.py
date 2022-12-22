@@ -81,7 +81,7 @@ def clr():
 clr()
 
 
-def main(clear=True, textToPrint=None):
+def mainMenu(clear=True, textToPrint=None):
     if clear is True:
         clr()
     if textToPrint is not None:
@@ -121,9 +121,9 @@ def test():
             if a.lower() == "yes" or a.lower() == "y":
                 test()
                 break
-            main()
+            mainMenu()
         if answer.lower() == "exit":
-            main(True, "Exited Test")
+            mainMenu(True, "Exited Test")
         else:
             clr()
             print("Incorrect, try again")
@@ -150,7 +150,7 @@ def practice():
             # the break command ends the while loop
             break
         if answer.lower() == "exit":
-            main(True, "Exited Practice")
+            mainMenu(True, "Exited Practice")
         else:
             clr()
             print("Incorrect, the correct answer was: " +
@@ -167,11 +167,11 @@ def study():
         for key, value in testTerms.items():
             print('%s:%s\n' % (key, value))
         input("Press enter to continue")
-        main()
+        mainMenu()
     if a.lower() == "p":
         practice()
     else:
         study()
 
 
-main(False)
+mainMenu(False)
