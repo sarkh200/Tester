@@ -122,7 +122,7 @@ def test():
             if a.lower() == "yes" or a.lower() == "y":
                 test()
                 break
-            quit()
+            main()
         if answer.lower() == "exit":
             main(True, "Exited Test")
         else:
