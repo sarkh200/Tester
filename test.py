@@ -3,7 +3,7 @@ import random
 import os
 
 # A dictionary of the things tested on
-tested = {
+testTerms = {
     "Marruá": "Agrale",
     "Luling": "Beijing Automobile Works",
     "T-Rex": "Bremach",
@@ -64,9 +64,9 @@ tested = {
 
 
 # gets a list of keys
-testKeys = list(tested.keys())
+testKeys = list(testTerms.keys())
 # gets a list of values
-testValues = list(tested.values())
+testValues = list(testTerms.values())
 
 
 def clr():
@@ -106,7 +106,7 @@ def main(clear=True, textToPrint=None):
 def test():
     clr()
     # the variable of randTruckInt will equal the random integer from 0 to the length of the list - 1 because lists go from 0 → ∞ instead of 1 → ∞
-    randTruckInt = random.randrange(0, len(tested) - 1)
+    randTruckInt = random.randrange(0, len(testTerms) - 1)
     print("Let's begin")
     print("I'll display the truck model and you'll need to input the brand")
     print("Input 'exit' in order to exit")
@@ -138,7 +138,7 @@ def practice():
     print("I'll display the truck model and you'll need to input the brand")
     # Loops the commands until the user gets the question right
     while True:
-        randTruckInt = random.randrange(0, len(tested) - 1)
+        randTruckInt = random.randrange(0, len(testTerms) - 1)
         print("Input 'exit' in order to exit")
         # prints the value in the list at the random value
         print(testKeys[randTruckInt])
@@ -165,7 +165,7 @@ def study():
     a = input(":")
     if a.lower() == "t":
         # prints out the dictionary in Key:Value format
-        for key, value in tested.items():
+        for key, value in testTerms.items():
             print('%s:%s\n' % (key, value))
         input("Press enter to continue")
         main()
