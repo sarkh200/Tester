@@ -160,7 +160,7 @@ def study():
     print("Practice: P")
     a = input(":")
     if a.lower() == "t":
-        # prints out the truck dictionary in Key:Value format
+        # prints out the dictionary in Key:Value format
         for key, value in tested.items():
             print('%s:%s\n' % (key, value))
         input("Press enter to continue")
