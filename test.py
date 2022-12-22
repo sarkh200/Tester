@@ -2,7 +2,7 @@ from os import name
 import random
 import os
 
-# A dictionary of models and cars
+# A dictionary of the things tested on
 tested = {
     "Marruá": "Agrale",
     "Luling": "Beijing Automobile Works",
