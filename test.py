@@ -87,6 +87,8 @@ def main(clear=True, textToPrint=None):
     if textToPrint is not None:
         print(textToPrint)
     print("Do you want to study or test?")
+    print("Input 'exit' in order to exit")
+    print("")
     while True:
         a = input(":")
         if a.lower() == "study" or a.lower() == "s":
@@ -95,6 +97,8 @@ def main(clear=True, textToPrint=None):
         if a.lower() == "test" or a.lower() == "t":
             test()
             break
+        if a.lower() == "exit" or a.lower == "e":
+            quit()
         clr()
         print("Error, enter 'Study' or 'Test'")
 
