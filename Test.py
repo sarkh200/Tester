@@ -2,7 +2,7 @@ import random
 import os
 
 # A dictionary of models and cars
-trucks = {
+tested = {
     # key:value
     "Marruá": "Agrale",
     "Luling": "Beijing Automobile Works",
@@ -64,9 +64,9 @@ trucks = {
 
 
 # gets a list of truck models from the 1st value
-truckModels = list(trucks.keys())
+truckModels = list(tested.keys())
 # gets a list of truck brands from the 2nd value
-truckBrands = list(trucks.values())
+truckBrands = list(tested.values())
 
 # clears command prompt
 os.system("cls")
@@ -93,7 +93,7 @@ def main(clear=True, textToPrint=None):
 def test():
     os.system("cls")
     # the variable of randTruckInt will equal the random integer from 0 to the length of the list - 1 because lists go from 0 → ∞ instead of 1 → ∞
-    randTruckInt = random.randrange(0, len(trucks) - 1)
+    randTruckInt = random.randrange(0, len(tested) - 1)
     print("Let's begin")
     print("I'll display the truck model and you'll need to input the brand")
     print("Input 'exit' in order to exit")
@@ -126,7 +126,7 @@ def practice():
     # Loops the commands until the user gets the question right
     while True:
         # the variable of randTruckInt will equal the random integer from 0 to the length of the list - 1 because lists go from 0 → ∞ instead of 1 → ∞
-        randTruckInt = random.randrange(0, len(trucks) - 1)
+        randTruckInt = random.randrange(0, len(tested) - 1)
         print("Input 'exit' in order to exit")
         # prints the value in the list at the random value
         print(truckModels[randTruckInt])
@@ -153,7 +153,7 @@ def study():
     a = input(":")
     if a.lower() == "t":
         # prints out the truck dictionary in Key:Value format
-        for key, value in trucks.items():
+        for key, value in tested.items():
             print('%s:%s\n' % (key, value))
         input("Press enter to continue")
         main()
