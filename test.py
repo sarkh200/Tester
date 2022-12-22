@@ -71,21 +71,21 @@ testValues = list(tested.values())
 
 def clr():
     if name == "nt":
-        _x = "cls"
+        x = "cls"
     else:
-        _x = "clear"
-    return os.system(_x)
+        x = "clear"
+    return os.system(x)
 
 
 # clears command prompt
 clr()
 
 
-def main(clear=True, text_to_print=None):
+def main(clear=True, textToPrint=None):
     if clear is True:
         clr()
-    if text_to_print is not None:
-        print(text_to_print)
+    if textToPrint is not None:
+        print(textToPrint)
     print("Do you want to study or test?")
     while True:
         a = input(":")
@@ -102,7 +102,7 @@ def main(clear=True, text_to_print=None):
 def test():
     clr()
     # the variable of randTruckInt will equal the random integer from 0 to the length of the list - 1 because lists go from 0 → ∞ instead of 1 → ∞
-    rand_truck_int = random.randrange(0, len(tested) - 1)
+    randTruckInt = random.randrange(0, len(tested) - 1)
     print("Let's begin")
     print("I'll display the truck model and you'll need to input the brand")
     print("Input 'exit' in order to exit")
@@ -110,9 +110,9 @@ def test():
     # Loops the commands until the user gets the question right
     while True:
         # prints the value in the list at the random value
-        print(testKeys[rand_truck_int])
+        print(testKeys[randTruckInt])
         answer = input(":")
-        if answer.lower() == testValues[rand_truck_int].lower():
+        if answer.lower() == testValues[randTruckInt].lower():
             print("Good job")
             a = input("Do you want to go again?: ")
             if a.lower() == "yes" or a.lower() == "y":
@@ -134,12 +134,12 @@ def practice():
     print("I'll display the truck model and you'll need to input the brand")
     # Loops the commands until the user gets the question right
     while True:
-        rand_truck_int = random.randrange(0, len(tested) - 1)
+        randTruckInt = random.randrange(0, len(tested) - 1)
         print("Input 'exit' in order to exit")
         # prints the value in the list at the random value
-        print(testKeys[rand_truck_int])
+        print(testKeys[randTruckInt])
         answer = input(":")
-        if answer.lower() == testValues[rand_truck_int].lower():
+        if answer.lower() == testValues[randTruckInt].lower():
             print("Good job")
             a = input("Do you want to go again?: ")
             if a.lower() == "yes" or a.lower() == "y":
@@ -151,21 +151,21 @@ def practice():
         else:
             clr()
             print("Incorrect, the correct answer was: " +
-                  testValues[rand_truck_int])
+                  testValues[randTruckInt])
 
 
 def study():
     clr()
     print("View terms: T")
     print("Practice: P")
-    _a = input(":")
-    if _a.lower() == "t":
+    a = input(":")
+    if a.lower() == "t":
         # prints out the truck dictionary in Key:Value format
         for key, value in tested.items():
             print('%s:%s\n' % (key, value))
         input("Press enter to continue")
         main()
-    if _a.lower() == "p":
+    if a.lower() == "p":
         practice()
     else:
         study()
