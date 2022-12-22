@@ -68,7 +68,7 @@ testKeys = list(testTerms.keys())
 # gets a list of values
 testValues = list(testTerms.values())
 
-
+#clears the console with cls being used if the user is using an nt kernel
 def clr():
     if name == "nt":
         x = "cls"
