@@ -1,75 +1,72 @@
 from os import name
 import random
 import os
+import csv
+import json
 
-# A dictionary of the things tested on
+hs = float()
+testHeader1 = str()
+testHeader2 = str()
+testTerms = dict()
+
+
+def startTests():
+    try:
+        open("TestTerms.csv")
+    except:
+        print("Error, Test Terms.csv is corrupted or missing")
+        print("Create a new file named 'TestTerms.csv' and input the test data into it (the first row will be treated as the titles for their specific columns)")
+        print("Press enter to close terminal")
+        input(":")
+        quit()
+    try:
+        open("Config.json")
+    except:
+        print("Error, Config.json is corrupted or missing")
+        print("Please redownload the 'Config.json' file")
+        print("Press enter to close terminal")
+        input(":")
+        quit()
+    try:
+        with open("Config.json", "r") as configJson:
+            config = json.load(configJson)
+        hs = config["High Score"]
+    except:
+        print("Error, Config.json is missing the 'High Score' object")
+        print("Please redownload the 'Config.json' file or add the 'High Score' object in the 'Config.json' file")
+        print("Press enter to close terminal")
+        input(":")
+        quit()
+    try:
+        hs = float(hs)
+    except:
+        print("Error the 'High Score' object in 'Config.json' is not a number")
+        print("Please redownload the 'Config.json' file or edit the 'High Score' object in the 'Config.json' file to equal a number")
+        print("Press enter to close terminal")
+        input(":")
+        quit()
+
+
+startTests()
+
+with open("Config.json", "r") as configJson:
+    config = json.load(configJson)
+hs = float(config["High Score"])
+
+data = csv.reader(open('TestTerms.csv', 'r'))  # refrences the csv file
+
 testTerms = {
-    "Marruá": "Agrale",
-    "Luling": "Beijing Automobile Works",
-    "T-Rex": "Bremach",
-    "Star": "Chang'an",
-    "Colorado": "Chevrolet",
-    "D-Max": "Chevrolet",
-    "LSSV ": "Chevrolet",
-    "Silverado": "Chevrolet",
-    "Montana": "Chevrolet",
-    "Labo": "Damas/Labo",
-    "Hijet": "Daihatsu",
-    "Rich": "Dongfeng",
-    "Fullback": "Fiat",
-    "Strada": "Fiat",
-    "Toro": "Fiat",
-    "Maverick": "Ford",
-    "F-150": "Ford",
-    "F-250": "Ford",
-    "F-350": "Ford",
-    "F-450": "Ford",
-    "SUP": "Foton",
-    "Tunland": "Foton",
-    "Canyon": "GMC",
-    "Sierra": "GMC",
-    "GA200": "Gonow",
-    "Deer": "Great Wall",
-    "V240": "Great Wall",
-    "Wingle 5": "Great Wall",
-    "Wingle 6": "Great Wall",
-    "Ruiyi": "Hafei",
-    "Acty": "Honda",
-    "Ridgeline": "Honda",
-    "Porter": "Hyundai",
-    "Santa Cruz": "Hyundai",
-    "Arisun": "Iran Khodro",
-    "Bardo": "Iran Khodro",
-    "D-Max": "Isuzu",
-    "Gladiator": "Jeep",
-    "Bongo": "Kia",
-    "Scorpio": "Mahindra",
-    "BT-50": "Mazda",
-    "T60": "Maxus",
-    "X-Class": "Mercedes-Benz",
-    "Minicab": "Mitsubishi",
-    "Triton": "Mitsubishi",
-    "Pony": "Namco",
-    "Clipper": "Nissan",
-    "Frontier": "Nissan",
-    "NP200": "Nissan",
-    "Navara": "Nissan",
-    "Titan": "Nissan",
-    "R1T": "Rivian",
-    "Hilux": "Toyota",
-    "Land Cruiser": "Toyota",
-    "Tacoma": "Toyota",
-    "Tundra": "Toyota",
-}
+    rows[0]: rows[1] for rows in data
+}  # Generates a test dictionary from the csv file
+
+testHeader1 = list(testTerms.keys())[0]  # gets the header of the
+testHeader2 = list(testTerms.values())[0]
+
+# Remove headers from dictionary
+testTerms.pop(list(testTerms.keys())[0])
 
 
-# gets a list of keys
-testKeys = list(testTerms.keys())
-# gets a list of values
-testValues = list(testTerms.values())
-
-#clears the console with cls being used if the user is using an nt kernel
-def clr():
+def clr():  # clears the console with cls being used if the user is using an nt kernel
     if name == "nt":
         x = "cls"
     else:
@@ -77,17 +74,18 @@ def clr():
     return os.system(x)
 
 
-# clears command prompt
-clr()
+clr()  # clears command prompt
 
 
-def mainMenu(clear=True, textToPrint=None):
-    if clear is True:
+def mainMenu(clear=True, textToPrint=None):  # the main menu of the program
+    if clear == True:
         clr()
-    if textToPrint is not None:
+    if textToPrint != None:
         print(textToPrint)
+
     print("Do you want to study or test?")
-    while True:
+
+    while True:  # loops until user inputs accepted input
         print("Input 'exit' in order to exit")
         a = input(":")
         if a.lower() == "study" or a.lower() == "s":
@@ -102,76 +100,159 @@ def mainMenu(clear=True, textToPrint=None):
         print("Error, enter 'Study' or 'Test'")
 
 
-def test():
-    clr()
-    # the variable of randTruckInt will equal the random integer from 0 to the length of the list - 1 because lists go from 0 → ∞ instead of 1 → ∞
-    randTruckInt = random.randrange(0, len(testTerms) - 1)
-    print("Let's begin")
-    print("I'll display the truck model and you'll need to input the brand")
-    print("Input 'exit' in order to exit")
+def shuffleDict(refrenceDict):  # returns a shuffled version of a dictionary
+    d = {}
+    l = list(testTerms.keys())
+    random.shuffle(l)
+    for key in l:
+        d.update({key: refrenceDict[key]})
+    return d
 
-    # Loops the commands until the user gets the question right
-    while True:
-        # prints the value in the list at the random value
-        print(testKeys[randTruckInt])
+
+class nthDictionary:
+    def key(dict=dict(), n=0):  # returns the nth key of a dictionary
+        a = str(list(dict.keys())[n])
+        return a
+
+    def value(dict=dict(), n=0):  # returns the nth value of a dictionary
+        a = str(list(dict.values())[n])
+        return a
+
+
+def test():  # tests the user on the questions
+    clr()
+
+    testTerms_shuffled = shuffleDict(testTerms)
+
+    print("Let's begin")
+
+    n = 0
+    c = 0
+
+    while n < len(testTerms_shuffled):  # loops until the user goes through all the questions
+        print("I'll display the " + testHeader1 +
+              " and you'll need to input the " + testHeader2)
+        print("Input 'exit' in order to exit")
+
+        q = nthDictionary.key(testTerms_shuffled, n)
+        ans = nthDictionary.value(testTerms_shuffled, n)
+
+        print(q)
         answer = input(":")
-        if answer.lower() == testValues[randTruckInt].lower():
+
+        if answer.lower() == ans.lower():
+            n += 1
+            c += 1
+            clr()
             print("Good job")
-            a = input("Do you want to go again?: ")
-            if a.lower() == "yes" or a.lower() == "y":
-                test()
-                break
-            mainMenu()
-        if answer.lower() == "exit":
-            mainMenu(True, "Exited Test")
+
+        elif answer == "exit":
+            if (((c+1)/(n+1))*100) > float(hs) and n > 0:
+                with open('Config.json', 'r+') as configJson:
+                    j = json.load(configJson)
+                    configJson.seek(0)
+                    j["High Score"] = ((c/n)*100)
+                    json.dump(j, configJson)
+                    configJson.truncate()
+            if n > 0:
+                mainMenu(True, "Exited Test with a score of: " +
+                         str((c/n)*100) + "%")
+            else:
+                mainMenu(True, "Exited Test with a score of: " +
+                         str((c/n+1)*100) + "%")
+            break
+
         else:
             clr()
-            print("Incorrect, try again")
-            print("I'll display the truck model and you'll need to input the brand")
-            print("Input 'exit' in order to exit")
+            print("Incorrect")
+            n += 1
+
+    if (((c)/(n))*100) > float(hs) and n > 0:
+        with open('Config.json', 'r+') as configJson:
+            j = json.load(configJson)
+            configJson.seek(0)
+            j["High Score"] = (((c)/(n+1))*100)
+            print(j)
+            json.dump(j, configJson)
+            configJson.truncate()
+
+    print("You have tested all of the terms")
+    print("You got a score of: " + str(((c+1)/(n+1))*100) + "%")
+    print("Would you like to try again?")
+    a = input(":").lower()
+    if a == "y" or a == "yes":
+        test()
+    else:
+        mainMenu()
 
 
 def practice():
     clr()
+
+    testTerms_shuffled = shuffleDict(testTerms)
+
     print("Let's begin")
-    print("I'll display the truck model and you'll need to input the brand")
-    # Loops the commands until the user gets the question right
-    while True:
-        randTruckInt = random.randrange(0, len(testTerms) - 1)
-        print("Input 'exit' in order to exit")
-        # prints the value in the list at the random value
-        print(testKeys[randTruckInt])
+
+    n = 0
+    c = 0
+
+    while n < len(testTerms_shuffled):
+        print("I'll display the " + testHeader1 +
+              " and you'll need to input the " + testHeader2)
+        print("Input 'exit' in order to exit or 'give up' to go to the next question")
+
+        q = nthDictionary.key(testTerms_shuffled, n)
+        ans = nthDictionary.value(testTerms_shuffled, n)
+
+        print(q)
         answer = input(":")
-        if answer.lower() == testValues[randTruckInt].lower():
+
+        if answer.lower() == ans.lower():
+            n += 1
+            c += 1
+            clr()
             print("Good job")
-            a = input("Do you want to go again?: ")
-            if a.lower() == "yes" or a.lower() == "y":
-                practice()
-            # the break command ends the while loop
+        elif answer == "exit":
+            mainMenu(True, "Exited Practice Test with a score of:" +
+                     str(c/(n+1)*100) + "%")
             break
-        if answer.lower() == "exit":
-            mainMenu(True, "Exited Practice")
         else:
             clr()
             print("Incorrect, the correct answer was: " +
-                  testValues[randTruckInt])
+                  ans.capitalize())
+            print("You answered: " + answer.capitalize())
+            n += 1
+
+    print("You have practiced all of the terms")
+    print("You got a score of: " + str(((c)/(n+1))*100) + "%")
+    print("Try out Test in order to save a high score")
+    print("Would you like to try again?")
+    a = input(":").lower()
+    if a == "y" or a == "yes":
+        practice()
+    else:
+        mainMenu()
 
 
 def study():
     clr()
+
     print("View terms: T")
     print("Practice: P")
+    print("Exit: E")
     a = input(":")
+
     if a.lower() == "t":
-        # prints out the dictionary in Key:Value format
-        for key, value in testTerms.items():
+        for key, value in testTerms.items():  # prints out the dictionary in Key:Value format
             print('%s:%s\n' % (key, value))
         input("Press enter to continue")
-        mainMenu()
-    if a.lower() == "p":
+        study()
+    elif a.lower() == "p":
         practice()
+    elif a.lower() == "e":
+        mainMenu()
     else:
         study()
 
 
-mainMenu(False)
+mainMenu()
