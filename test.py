@@ -4,6 +4,9 @@ import os
 import csv
 import json
 
+defaultHS = {
+    "High Score": 0
+}
 hs = float()
 testHeader1 = str()
 testHeader2 = str()
@@ -14,42 +17,71 @@ def startTests():
     try:
         open("TestTerms.csv")
     except:
-        print("Error, Test Terms.csv is corrupted or missing")
-        print("Create a new file named 'TestTerms.csv' and input the test data into it (the first row will be treated as the titles for their specific columns)")
+        print("Error, Test Terms.csv is missing")
+        print("A blank csv file will be made on enter")
+        print("Input the test data into the csv file (the first row will be treated as the titles for their specific columns)")
         print("Press enter to close terminal")
         input(":")
+        with open("TestTerms.csv", "w", newline='') as termsCsv:
+            w = csv.writer(termsCsv)
+            w.writerow(['Question', 'Answer'])
+            w.writerow(['Question1', 'Answer1'])
+            w.writerow(['Question2', 'Answer2'])
         quit()
     try:
-        open("Config.json")
+        data = csv.reader(open('TestTerms.csv', 'r'))
+        testTerms = {
+            rows[0]: rows[1] for rows in data
+        }
+        testHeader1 = list(testTerms.keys())[0]
+        testHeader2 = list(testTerms.values())[0]
     except:
-        print("Error, Config.json is corrupted or missing")
-        print("Please redownload the 'Config.json' file")
+        print("Error, Test Terms.csv is corrupted or in an incorrect format")
+        print("Press enter to reset the csv file or close the terminal to attempt to fix it yourself")
+        print("Input the test data into the csv file (the first row will be treated as the titles for their specific columns)")
         print("Press enter to close terminal")
         input(":")
+        with open("TestTerms.csv", "w", newline='') as termsCsv:
+            termsCsv.seek(0)
+            termsCsv.truncate()
+            w = csv.writer(termsCsv)
+            w.writerow(['Question', 'Answer'])
+            w.writerow(['Question1', 'Answer1'])
+            w.writerow(['Question2', 'Answer2'])
         quit()
     try:
-        with open("Config.json", "r") as configJson:
+        open("Highscore.json")
+    except:
+        print("Error, Highscore.json is corrupted or missing")
+        print("A reset Highscore.json file will be made on enter or exit the program to diagnose the problem yourself")
+        print("Press enter to close terminal")
+        input(":")
+        with open("Highscore.json", "w") as hsJson:
+            json.dump(defaultHS, hsJson, indent=4)
+        quit()
+    try:
+        with open("Highscore.json", "r") as configJson:
             config = json.load(configJson)
         hs = config["High Score"]
     except:
-        print("Error, Config.json is missing the 'High Score' object")
-        print("Please redownload the 'Config.json' file or add the 'High Score' object in the 'Config.json' file")
+        print("Error, Highscore.json is missing the 'High Score' object")
+        print("Please redownload the 'Highscore.json' file or add the 'High Score' object in the 'Highscore.json' file")
         print("Press enter to close terminal")
         input(":")
         quit()
     try:
         hs = float(hs)
     except:
-        print("Error the 'High Score' object in 'Config.json' is not a number")
-        print("Please redownload the 'Config.json' file or edit the 'High Score' object in the 'Config.json' file to equal a number")
+        print("Error the 'High Score' object in 'Highscore.json' is not a number")
+        print("Please redownload the 'Highscore.json' file or edit the 'High Score' object in the 'Highscore.json' file to equal a number")
         print("Press enter to close terminal")
         input(":")
         quit()
 
 
-startTests()
+startTests()  # runs tests to check if TestTerms.cs and Highscore.json exists or is configured correctly
 
-with open("Config.json", "r") as configJson:
+with open("Highscore.json", "r") as configJson:
     config = json.load(configJson)
 hs = float(config["High Score"])
 
@@ -59,7 +91,7 @@ testTerms = {
     rows[0]: rows[1] for rows in data
 }  # Generates a test dictionary from the csv file
 
-testHeader1 = list(testTerms.keys())[0]  # gets the header of the
+testHeader1 = list(testTerms.keys())[0]
 testHeader2 = list(testTerms.values())[0]
 
 # Remove headers from dictionary
@@ -129,7 +161,8 @@ def test():  # tests the user on the questions
     n = 0
     c = 0
 
-    while n < len(testTerms_shuffled):  # loops until the user goes through all the questions
+    # loops until the user goes through all the questions
+    while n < len(testTerms_shuffled):
         print("I'll display the " + testHeader1 +
               " and you'll need to input the " + testHeader2)
         print("Input 'exit' in order to exit")
@@ -148,18 +181,18 @@ def test():  # tests the user on the questions
 
         elif answer == "exit":
             if (((c+1)/(n+1))*100) > float(hs) and n > 0:
-                with open('Config.json', 'r+') as configJson:
+                with open('Highscore.json', 'r+') as configJson:
                     j = json.load(configJson)
                     configJson.seek(0)
                     j["High Score"] = ((c/n)*100)
-                    json.dump(j, configJson)
+                    json.dump(j, configJson, indent=4)
                     configJson.truncate()
             if n > 0:
                 mainMenu(True, "Exited Test with a score of: " +
                          str((c/n)*100) + "%")
             else:
                 mainMenu(True, "Exited Test with a score of: " +
-                         str((c/n+1)*100) + "%")
+                         str((c/(n+1))*100) + "%")
             break
 
         else:
@@ -168,16 +201,15 @@ def test():  # tests the user on the questions
             n += 1
 
     if (((c)/(n))*100) > float(hs) and n > 0:
-        with open('Config.json', 'r+') as configJson:
+        with open('Highscore.json', 'r+') as configJson:
             j = json.load(configJson)
             configJson.seek(0)
-            j["High Score"] = (((c)/(n+1))*100)
-            print(j)
-            json.dump(j, configJson)
+            j["High Score"] = (((c/n))*100)
+            json.dump(j, configJson, indent=4)
             configJson.truncate()
 
     print("You have tested all of the terms")
-    print("You got a score of: " + str(((c+1)/(n+1))*100) + "%")
+    print("You got a score of: " + str(((c/n))*100) + "%")
     print("Would you like to try again?")
     a = input(":").lower()
     if a == "y" or a == "yes":
@@ -213,8 +245,12 @@ def practice():
             clr()
             print("Good job")
         elif answer == "exit":
-            mainMenu(True, "Exited Practice Test with a score of:" +
-                     str(c/(n+1)*100) + "%")
+            if n > 0:
+                mainMenu(True, "Exited Test with a score of: " +
+                         str((c/n)*100) + "%")
+            else:
+                mainMenu(True, "Exited Test with a score of: " +
+                         str((c/(n+1))*100) + "%")
             break
         else:
             clr()
@@ -224,7 +260,7 @@ def practice():
             n += 1
 
     print("You have practiced all of the terms")
-    print("You got a score of: " + str(((c)/(n+1))*100) + "%")
+    print("You got a score of: " + str(((c/n))*100) + "%")
     print("Try out Test in order to save a high score")
     print("Would you like to try again?")
     a = input(":").lower()
