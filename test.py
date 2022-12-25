@@ -1,4 +1,3 @@
-from os import name
 import random
 import os
 import csv
@@ -97,7 +96,7 @@ testTerms.pop(list(testTerms.keys())[0])
 
 
 def clr():  # clears the console with cls being used if the user is using an nt kernel
-    if name == "nt":
+    if os.name == "nt":
         x = "cls"
     else:
         x = "clear"
