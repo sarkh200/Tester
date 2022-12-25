@@ -4,9 +4,9 @@ import os
 import csv
 import json
 
-defaultHS = {
-    "High Score": 0
-}
+defaultHS = {"High Score": 0}
+defaultCSV = {"Question": "Answer",
+              "Question1": "Answer1", "Question2": "Answer2"}
 hs = float()
 testHeader1 = str()
 testHeader2 = str()
@@ -22,17 +22,15 @@ def startTests():
         print("Input the test data into the csv file (the first row will be treated as the titles for their specific columns)")
         print("Press enter to close terminal")
         input(":")
-        with open("TestTerms.csv", "w", newline='') as termsCsv:
+        with open("TestTerms.csv", "w", newline="") as termsCsv:
             w = csv.writer(termsCsv)
-            w.writerow(['Question', 'Answer'])
-            w.writerow(['Question1', 'Answer1'])
-            w.writerow(['Question2', 'Answer2'])
+            for x in range(len(defaultCSV)):
+                w.writerow([list(defaultCSV.keys())[x],
+                           list(defaultCSV.values())[x]])
         quit()
     try:
-        data = csv.reader(open('TestTerms.csv', 'r'))
-        testTerms = {
-            rows[0]: rows[1] for rows in data
-        }
+        data = csv.reader(open("TestTerms.csv", "r"))
+        testTerms = {rows[0]: rows[1] for rows in data}
         testHeader1 = list(testTerms.keys())[0]
         testHeader2 = list(testTerms.values())[0]
     except:
@@ -41,13 +39,13 @@ def startTests():
         print("Input the test data into the csv file (the first row will be treated as the titles for their specific columns)")
         print("Press enter to close terminal")
         input(":")
-        with open("TestTerms.csv", "w", newline='') as termsCsv:
+        with open("TestTerms.csv", "w", newline="") as termsCsv:
             termsCsv.seek(0)
             termsCsv.truncate()
             w = csv.writer(termsCsv)
-            w.writerow(['Question', 'Answer'])
-            w.writerow(['Question1', 'Answer1'])
-            w.writerow(['Question2', 'Answer2'])
+            w.writerow(["Question", "Answer"])
+            w.writerow(["Question1", "Answer1"])
+            w.writerow(["Question2", "Answer2"])
         quit()
     try:
         open("Highscore.json")
@@ -64,16 +62,16 @@ def startTests():
             config = json.load(configJson)
         hs = config["High Score"]
     except:
-        print("Error, Highscore.json is missing the 'High Score' object")
-        print("Please redownload the 'Highscore.json' file or add the 'High Score' object in the 'Highscore.json' file")
+        print("Error, Highscore.json is missing the High Score object")
+        print("Please redownload the Highscore.json file or add the High Score object in the Highscore.json file")
         print("Press enter to close terminal")
         input(":")
         quit()
     try:
         hs = float(hs)
     except:
-        print("Error the 'High Score' object in 'Highscore.json' is not a number")
-        print("Please redownload the 'Highscore.json' file or edit the 'High Score' object in the 'Highscore.json' file to equal a number")
+        print("Error the High Score object in Highscore.json is not a number")
+        print("Please redownload the Highscore.json file or edit the High Score object in the Highscore.json file to equal a number")
         print("Press enter to close terminal")
         input(":")
         quit()
@@ -85,7 +83,7 @@ with open("Highscore.json", "r") as configJson:
     config = json.load(configJson)
 hs = float(config["High Score"])
 
-data = csv.reader(open('TestTerms.csv', 'r'))  # refrences the csv file
+data = csv.reader(open("TestTerms.csv", "r"))  # refrences the csv file
 
 testTerms = {
     rows[0]: rows[1] for rows in data
@@ -118,7 +116,7 @@ def mainMenu(clear=True, textToPrint=None):  # the main menu of the program
     print("Do you want to study or test?")
 
     while True:  # loops until user inputs accepted input
-        print("Input 'exit' in order to exit")
+        print("Input exit in order to exit")
         a = input(":")
         if a.lower() == "study" or a.lower() == "s":
             study()
@@ -129,7 +127,7 @@ def mainMenu(clear=True, textToPrint=None):  # the main menu of the program
         if a.lower() == "exit" or a.lower == "e":
             quit()
         clr()
-        print("Error, enter 'Study' or 'Test'")
+        print("Error, enter Study or Test")
 
 
 def shuffleDict(refrenceDict):  # returns a shuffled version of a dictionary
@@ -181,7 +179,7 @@ def test():  # tests the user on the questions
 
         elif answer == "exit":
             if (((c+1)/(n+1))*100) > float(hs) and n > 0:
-                with open('Highscore.json', 'r+') as configJson:
+                with open("Highscore.json", "r+") as configJson:
                     j = json.load(configJson)
                     configJson.seek(0)
                     j["High Score"] = ((c/n)*100)
@@ -201,7 +199,7 @@ def test():  # tests the user on the questions
             n += 1
 
     if (((c)/(n))*100) > float(hs) and n > 0:
-        with open('Highscore.json', 'r+') as configJson:
+        with open("Highscore.json", "r+") as configJson:
             j = json.load(configJson)
             configJson.seek(0)
             j["High Score"] = (((c/n))*100)
@@ -244,7 +242,7 @@ def practice():
             c += 1
             clr()
             print("Good job")
-        elif answer == "exit":
+        elif answer.lower() == "exit":
             if n > 0:
                 mainMenu(True, "Exited Test with a score of: " +
                          str((c/n)*100) + "%")
@@ -252,12 +250,15 @@ def practice():
                 mainMenu(True, "Exited Test with a score of: " +
                          str((c/(n+1))*100) + "%")
             break
+        elif answer.lower() == "give up":
+            clr()
+            print("You inputted 'give up', the correct answer was: " +
+                  ans)
+            n += 1
         else:
             clr()
-            print("Incorrect, the correct answer was: " +
-                  ans.capitalize())
+            print("Incorrect, try again")
             print("You answered: " + answer.capitalize())
-            n += 1
 
     print("You have practiced all of the terms")
     print("You got a score of: " + str(((c/n))*100) + "%")
@@ -280,7 +281,7 @@ def study():
 
     if a.lower() == "t":
         for key, value in testTerms.items():  # prints out the dictionary in Key:Value format
-            print('%s:%s\n' % (key, value))
+            print("%s:%s\n" % (key, value))
         input("Press enter to continue")
         study()
     elif a.lower() == "p":
