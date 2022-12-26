@@ -3,9 +3,11 @@ import os
 import csv
 import json
 
-defaultHS = {"High Score": 0}  # the default highscore.json
+# this will be written to Highscore.json if the file needs to be reset or remade
+defaultHS = {"High Score": 0}
 defaultCSV = {"Question": "Answer",
-              "Question1": "Answer1", "Question2": "Answer2"}  # the default csv file
+              "Question1": "Answer1", "Question2": "Answer2"}  # this will be written to TestTerms.csv if the file needs to be reset or remade
+
 hs = float()
 testHeader1 = str()
 testHeader2 = str()
@@ -13,14 +15,14 @@ testTerms = dict()
 
 
 def startTests():  # tests to see if the highscore.json and testterms.csv file is present and in a correct state
-    try:  # tests to see if TestTerms.csv is there
+    try:  # tests to see if TestTerms.csv is there by attempting to open the file
         open("TestTerms.csv")
     except:
         print("Error, Test Terms.csv is missing")
         print("A blank csv file will be made on enter")
         print("Input the test data into the csv file (the first row will be treated as the titles for their specific columns)")
         print("Press enter to close terminal")
-        # gives the user a chance to fix the problem themselves before the program generates a new csv
+        # this gives the user a chance to fix the problem themselves before the program generates a new csv
         input(":")
         with open("TestTerms.csv", "w", newline="") as termsCsv:
             w = csv.writer(termsCsv)
@@ -169,8 +171,8 @@ def test():  # tests the user on the questions
 
     # loops until the user goes through all the questions
     while n < len(testTerms_shuffled):
-        print("I'll display the " + testHeader1 +
-              " and you'll need to input the " + testHeader2)
+        print(
+            f"I'll display the {testHeader1} and you'll need to input the {testHeader2}")
         print("Input 'exit' in order to exit")
 
         q = nthDictionary.key(testTerms_shuffled, n)
@@ -193,14 +195,14 @@ def test():  # tests the user on the questions
                     j["High Score"] = ((c/n)*100)
                     json.dump(j, configJson, indent=4)
                     configJson.truncate()
-                mainMenu(True, "Exited Test with a score of: " +
-                         str((c/n)*100) + "%")
+                mainMenu(
+                    True, f"Exited Test with a score of: {str((c/n)*100)}%")
             if n > 0:
-                mainMenu(True, "Exited Test with a score of: " +
-                         str((c/n)*100) + "%")
+                mainMenu(
+                    True, f"Exited Test with a score of: {str((c/n)*100)}%")
             else:
-                mainMenu(True, "Exited Test with a score of: " +
-                         str((c/(n+1))*100) + "%")
+                mainMenu(
+                    True, f"Exited Test with a score of: {str((c/(n+1))*100)}%")
             break
 
         else:
@@ -212,12 +214,12 @@ def test():  # tests the user on the questions
         with open("Highscore.json", "r+") as configJson:
             j = json.load(configJson)
             configJson.seek(0)
-            j["High Score"] = (((c/n))*100)
+            j["High Score"] = ((c/n)*100)
             json.dump(j, configJson, indent=4)
             configJson.truncate()
 
     print("You have tested all of the terms")
-    print("You got a score of: " + str(((c/n))*100) + "%")
+    print(f"You got a score of: {str((c/n)*100)}%")
     print("Would you like to try again?")
     a = input(":").lower()
     if a == "y" or a == "yes":
@@ -237,8 +239,8 @@ def practice():
     c = 0
 
     while n < len(testTerms_shuffled):
-        print("I'll display the " + testHeader1 +
-              " and you'll need to input the " + testHeader2)
+        print(
+            f"I'll display the {testHeader1} and you'll need to input the {testHeader2}")
         print("Input 'exit' in order to exit or 'give up' to go to the next question")
 
         q = nthDictionary.key(testTerms_shuffled, n)
@@ -254,11 +256,11 @@ def practice():
             print("Good job")
         elif answer.lower() == "exit":
             if n > 0:
-                mainMenu(True, "Exited Test with a score of: " +
-                         str((c/n)*100) + "%")
+                mainMenu(
+                    True, f"Exited Practice with a score of: {str((c/n)*100)}%")
             else:
-                mainMenu(True, "Exited Test with a score of: " +
-                         str((c/(n+1))*100) + "%")
+                mainMenu(
+                    True, f"Exited Practice with a score of: {str((c/(n+1))*100)}%")
             break
         elif answer.lower() == "give up":
             clr()
@@ -271,7 +273,7 @@ def practice():
             print("You answered: " + answer.capitalize())
 
     print("You have practiced all of the terms")
-    print("You got a score of: " + str(((c/n))*100) + "%")
+    print(f"You got a score of: {str(((c/n))*100)}%")
     print("Try out Test in order to save a high score")
     print("Would you like to try again?")
     a = input(":").lower()
